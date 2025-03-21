@@ -1,0 +1,35 @@
+---
+- name: Create home-assistant folder
+  ansible.builtin.file:
+    path: "{{ config_dir }}/home-assistant"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Create Home Assistant config folder
+  ansible.builtin.file:
+    path: "{{ config_dir }}/home-assistant/config"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Copy HA backup archive
+  ansible.builtin.copy:
+    src: files/homeAssistant.tar.gz
+    dest: "{{ config_dir }}/home-assistant/homeassistant.tar.gz"
+    mode: '0640'
+  become: false
+
+- name: Unarchive HA config
+  ansible.builtin.unarchive:
+    src: "{{ config_dir }}/home-assistant/homeassistant.tar.gz"
+    dest: "{{ config_dir }}/home-assistant/"
+    remote_src: true
+  become: false
+
+- name: Move leftover data to config
+  ansible.builtin.shell: >
+    rsync -av --remove-source-files
+    {{ config_dir }}/home-assistant/data/
+    {{ config_dir }}/home-assistant/config/
+  become: false

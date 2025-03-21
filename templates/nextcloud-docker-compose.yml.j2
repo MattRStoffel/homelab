@@ -1,0 +1,39 @@
+# {{ ansible_managed }}
+---
+services:
+{% if tailscale_enable and ts_authkey %}
+{% with name='nextcloud' %}
+{% include 'tailscale.yml.j2'%}
+{% endwith %}
+{% endif %}
+
+ db:
+  image: mariadb:10.6
+  container_name: nextcloud_db
+  command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+  restart: unless-stopped
+  environment:
+   - MYSQL_ROOT_PASSWORD={{ nextcloud_db_root_password }}
+   - MYSQL_PASSWORD={{ nextcloud_db_password }}
+   - MYSQL_DATABASE={{ nextcloud_db_name }}
+   - MYSQL_USER={{ nextcloud_db_user }}
+  volumes:
+   - {{ nextcloud_location }}/db:/var/lib/mysql
+
+ app:
+  image: nextcloud
+  container_name: nextcloud_app
+  environment:
+   - MYSQL_PASSWORD={{ nextcloud_db_password }}
+   - MYSQL_DATABASE={{ nextcloud_db_name }}
+   - MYSQL_USER={{ nextcloud_db_user }}
+   - MYSQL_HOST=db
+  volumes:
+   - {{ nextcloud_location }}/app:/var/www/html
+  restart: unless-stopped
+  depends_on: 
+   - db
+{% if tailscale_enable and ts_authkey %}
+   - tailscale-nextcloud
+  network_mode: service:tailscale-nextcloud
+{% endif %}

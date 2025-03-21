@@ -1,0 +1,21 @@
+# {{ ansible_managed }}
+---
+
+services:
+{% if tailscale_enable and ts_authkey %}
+{% with name='freshrss' %}
+{% include 'tailscale.yml.j2'%}
+{% endwith %}
+{% endif %}
+
+ freshrss:
+    image: lscr.io/linuxserver/freshrss:latest
+    container_name: freshrss
+    volumes:
+      - ./config:/config
+    restart: unless-stopped
+{% if tailscale_enable and ts_authkey %}
+    depends_on: 
+      - tailscale-freshrss
+    network_mode: service:tailscale-freshrss
+{% endif %}

@@ -1,0 +1,9 @@
+---
+- name: Mount drives
+  ansible.posix.mount:
+    path: "{{ item.path }}"
+    src: "UUID={{ item.uuid }}"
+    fstype: ext4
+    opts: noatime
+    state: mounted
+  loop: "{{ drives }}"

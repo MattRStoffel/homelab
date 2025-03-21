@@ -1,0 +1,36 @@
+---
+- name: Create folders for each Docker service
+  ansible.builtin.file:
+    path: "{{ config_dir }}/{{ item.name }}"
+    state: directory
+    mode: '0755'
+  become: false
+  loop: "{{ docker_services }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Copy docker-compose template for each service
+  ansible.builtin.template:
+    src: "{{ item.template }}"
+    dest: "{{ config_dir }}/{{ item.name }}/docker-compose.yml"
+    mode: '0640'
+  become: false
+  notify: "Restart Docker Services"
+  loop: "{{ docker_services }}"
+  loop_control:
+    label: "{{ item.name }}"
+  vars:
+    tailscale_enable: "{{ item.tailscale_enable | default(false) }}"
+
+- name: Ensure each service is running
+  community.docker.docker_compose_v2:
+    project_src: "{{ config_dir }}/{{ item.name }}/"
+    build: never
+    remove_orphans: true
+  become: false
+  loop: "{{ docker_services }}"
+  loop_control:
+    label: "{{ item.name }}"
+  vars:
+    tailscale_enable: "{{ item.tailscale_enable | default(false) }}"
+
