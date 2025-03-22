@@ -27,7 +27,7 @@
     - name: Include generic Docker services tasks
       ansible.builtin.import_tasks: tasks/docker_services.yml
 
-  handlers:
+  # handlers:
     - name: Restart Docker Services
       community.docker.docker_compose_v2:
         project_src: "{{ config_dir }}/{{ item.name }}/"

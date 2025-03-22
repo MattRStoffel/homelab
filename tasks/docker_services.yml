@@ -15,7 +15,6 @@
     dest: "{{ config_dir }}/{{ item.name }}/docker-compose.yml"
     mode: '0640'
   become: false
-  notify: "Restart Docker Services"
   loop: "{{ docker_services }}"
   loop_control:
     label: "{{ item.name }}"
