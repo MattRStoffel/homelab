@@ -1,0 +1,143 @@
+---
+
+services:
+{% if tailscale_enable and ts_authkey %}
+{% with name='arr' %}
+{% include 'tailscale.yml.j2'%}
+{% endwith %}
+{% endif %}
+
+ qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+      - WEBUI_PORT=8080
+      - TORRENTING_PORT=6881
+    volumes:
+      - ./qbittorrent:/config
+      - {{ downloads_dir }}:/downloads
+    restart: unless-stopped
+{% if tailscale_enable and ts_authkey %}
+    depends_on: 
+      - arr-tailscale
+    network_mode: service:arr-tailscale
+{% endif %}
+ jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: jackett
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+    volumes:
+      - ./jackett:/config
+      - {{ downloads_dir }}:/downloads
+    restart: unless-stopped 
+{% if tailscale_enable and ts_authkey %}
+    depends_on: 
+      - arr-tailscale
+    network_mode: service:arr-tailscale
+{% endif %}
+ bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+    volumes:
+      - ./bazarr:/config
+      - {{ movies_dir }}:/movies
+      - {{ tv_dir }}:/tv
+    restart: unless-stopped
+{% if tailscale_enable and ts_authkey %}
+    depends_on: 
+      - arr-tailscale
+    network_mode: service:arr-tailscale
+{% endif %}
+ lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    container_name: lidarr
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+    volumes:
+      - ./lidarr:/config
+      - {{ music_dir }}:/music
+      - {{ downloads_dir }}:/downloads
+    restart: unless-stopped
+{% if tailscale_enable and ts_authkey %}
+    depends_on: 
+      - arr-tailscale
+    network_mode: service:arr-tailscale
+{% endif %}
+ prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+    volumes:
+      - ./prowlarr:/config
+    restart: unless-stopped
+{% if tailscale_enable and ts_authkey %}
+    depends_on: 
+      - arr-tailscale
+    network_mode: service:arr-tailscale
+{% endif %}
+ radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+    volumes:
+      - ./radarr:/config
+      - {{ movies_dir }}:/movies
+      - {{ downloads_dir }}:/downloads
+    restart: unless-stopped
+{% if tailscale_enable and ts_authkey %}
+    depends_on: 
+      - arr-tailscale
+    network_mode: service:arr-tailscale
+{% endif %}
+ readarr:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+    volumes:
+      - ./readarr:/config
+      - {{ books_dir }}:/books
+      - {{ downloads_dir }}:/downloads
+    restart: unless-stopped
+{% if tailscale_enable and ts_authkey %}
+    depends_on: 
+      - arr-tailscale
+    network_mode: service:arr-tailscale
+{% endif %}
+ sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+    volumes:
+      - ./sonarr:/config
+      - {{ tv_dir }}:/tv
+      - {{ downloads_dir }}:/downloads
+    restart: unless-stopped
+{% if tailscale_enable and ts_authkey %}
+    depends_on: 
+      - arr-tailscale
+    network_mode: service:arr-tailscale
+{% endif %}
