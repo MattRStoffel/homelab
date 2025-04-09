@@ -13,16 +13,16 @@ services:
     container_name: jellyfin
     volumes:
       - ./config:/config
-      - ~/media/music:/data/music
-      - ~/media/audio:/data/audio
-      - ~/media/movies:/data/movies
-      - ~/media/tv:/data/tv
+      - {{ music_dir }}:/data/music
+      - {{ audio_dir }}:/data/audio
+      - {{ movies_dir }}:/data/movies
+      - {{ tv_dir }}:/data/tv
     environment:
-      - PUID=1001
-      - PGID=1001
+      - PUID={{ jellyfin_puid }}
+      - PGID={{ jellyfin_pgid }}
     restart: unless-stopped
 {% if tailscale_enable and ts_authkey %}
     depends_on: 
-      - tailscale-jellyfin
-    network_mode: service:tailscale-jellyfin
+      - jellyfin-tailscale
+    network_mode: service:jellyfin-tailscale
 {% endif %}

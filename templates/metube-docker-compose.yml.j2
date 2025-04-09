@@ -13,13 +13,10 @@ services:
     container_name: metube
     volumes:
       - ./config:/config
-      - ~/media/downloads/youtube:/downloads/youtube
-      - ~/media/downloads/music:/downloads/music
-      - ~/media/downloads/videos:/downloads/videos
-      - ~/media/downloads/photos:/downloads/photos
+      - {{ data_dir }}/downloads:/downloads
     restart: unless-stopped
 {% if tailscale_enable and ts_authkey %}
     depends_on: 
-      - tailscale-metube
-    network_mode: service:tailscale-metube
+      - metube-tailscale
+    network_mode: service:metube-tailscale
 {% endif %}

@@ -16,6 +16,6 @@ services:
     restart: unless-stopped
 {% if tailscale_enable and ts_authkey %}
     depends_on: 
-      - tailscale-freshrss
-    network_mode: service:tailscale-freshrss
+      - freshrss-tailscale
+    network_mode: service:freshrss-tailscale
 {% endif %}

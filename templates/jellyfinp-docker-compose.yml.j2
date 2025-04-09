@@ -13,13 +13,13 @@ services:
     container_name: jellyfinp
     volumes:
       - ./config:/config
-      - ~/data:/data/
+      - {{ data_dir }}:/data/
     environment:
-      - PUID=1001
-      - PGID=1001
+      - PUID={{ jellyfin_puid }}
+      - PGID={{ jellyfin_pgid }}
     restart: unless-stopped
 {% if tailscale_enable and ts_authkey %}
     depends_on: 
-      - tailscale-jellyfinp
-    network_mode: service:tailscale-jellyfinp
+      - jellyfinp-tailscale
+    network_mode: service:jellyfinp-tailscale
 {% endif %}

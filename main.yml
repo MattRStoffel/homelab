@@ -30,7 +30,7 @@
   # handlers:
     - name: Restart Docker Services
       community.docker.docker_compose_v2:
-        project_src: "{{ config_dir }}/{{ item.name }}/"
+        project_src: "{{ docker_dir }}/{{ item.name }}/"
         build: never
         state: restarted
       become: false

@@ -18,7 +18,7 @@ services:
    - MYSQL_DATABASE={{ nextcloud_db_name }}
    - MYSQL_USER={{ nextcloud_db_user }}
   volumes:
-   - {{ nextcloud_location }}/db:/var/lib/mysql
+   - {{ nextcloud_dir }}/db:/var/lib/mysql
 
  app:
   image: nextcloud
@@ -29,11 +29,11 @@ services:
    - MYSQL_USER={{ nextcloud_db_user }}
    - MYSQL_HOST=db
   volumes:
-   - {{ nextcloud_location }}/app:/var/www/html
+   - {{ nextcloud_dir }}/app:/var/www/html
   restart: unless-stopped
   depends_on: 
    - db
 {% if tailscale_enable and ts_authkey %}
-   - tailscale-nextcloud
-  network_mode: service:tailscale-nextcloud
+   - nextcloud-tailscale
+  network_mode: service:nextcloud-tailscale
 {% endif %}
