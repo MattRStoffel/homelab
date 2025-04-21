@@ -1,5 +1,6 @@
----
+# {{ ansible_managed }}
 
+---
 services:
 {% if tailscale_enable and ts_authkey %}
 {% with name='arr' %}
@@ -141,3 +142,4 @@ services:
       - arr-tailscale
     network_mode: service:arr-tailscale
 {% endif %}
+

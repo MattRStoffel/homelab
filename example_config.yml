@@ -1,26 +1,47 @@
----
 # Location where configuration files will be stored.
-config_dir: '~/docker/'
-home_dir: '/home/matt'
+home_dir:       '/home/matt'
+timezone:       'America/Los_Angeles'
+puid:           '1000'
+pgid:           '1000'
+jellyfin_puid:  '1001'
+jellyfin_pgid:  '1001'
 
-ts_authkey: 'auth'
+tailscale_dir:  '{{ home_dir }}/tailscale'
 
-# Pi-hole configuration.
-pihole_hostname: server
-my_timezone: America/Los_Angeles
-pihole_password: "password"
+vpn_provider: ''
+openvpn_user: ''
+openvpn_password: ''
+vpn_region: ''
 
-nextcloud_location: ~/nextcloud
+calibre_username: ''
+calibre_password: ''
+calibre_args: ''
+
+media_dir:      '{{ home_dir }}/media'
+nextcloud_dir:  '{{ home_dir }}/nextcloud'
+data_dir:       '{{ home_dir }}/data'
+docker_dir:     '{{ home_dir }}/docker'
+
+music_dir:      '{{ media_dir }}/audio/music'
+audio_dir:      '{{ media_dir }}/audio'
+books_dir:      '{{ media_dir }}/books'
+movies_dir:     '{{ media_dir }}/movies'
+tv_dir:         '{{ media_dir }}/tv'
+youtube_dir:    '{{ media_dir }}/youtube'
+downloads_dir:  '{{ media_dir }}/downloads'
+
+drives:
+  - { path: "{{ media_dir }}",      uuid: "ffc30921-a43b-45b2-b29c-80c1d786f554" }
+  - { path: "{{ nextcloud_dir }}",  uuid: "3f77516a-1a4f-4d90-af61-4b0d5e24aad0" }
+  - { path: "{{ data_dir }}",       uuid: "987e2748-a7e7-4924-8568-bae9aaa45175" }
+  - { path: "{{ docker_dir }}",     uuid: "dacce5ab-70ce-4c5f-9b3c-af0b53a837cb" }
+
+ts_authkey: ''
+
 nextcloud_db_root_password: "password"
 nextcloud_db_password: "password"
 nextcloud_db_name: "nextcloud"
 nextcloud_db_user: "nextcloud"
-
-drives:
-  - { path: "{{ home_dir }}/media",      uuid: "" }
-  - { path: "{{ home_dir }}/nextcloud",  uuid: "" }
-  - { path: "{{ home_dir }}/data",       uuid: "" }
-  - { path: "{{ home_dir }}/docker",     uuid: "" }
 
 docker_services:
   #  - { name: "actual-budget",    template: "templates/actual-budget-docker-compose.yml.j2",    tailscale_enable: true  }
@@ -31,3 +52,5 @@ docker_services:
   #  - { name: "pihole", template: "templates/pi-hole-docker-compose.yml.j2", tailscale_enable: false }
   - { name: "jellyfin",         template: "templates/jellyfin-docker-compose.yml.j2",         tailscale_enable: true  }
   - { name: "jellyfinp",        template: "templates/jellyfinp-docker-compose.yml.j2",        tailscale_enable: true  }
+  - { name: "arr",        template: "templates/arr-docker-compose.yml.j2",        tailscale_enable: true  }
+  - { name: "calibre",    template: "templates/calibre-docker-compose.yml.j2",  tailscale_enable:false }

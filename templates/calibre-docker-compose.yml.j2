@@ -1,0 +1,25 @@
+# {{ ansible_managed }}
+---
+
+services:
+  calibre:
+    image: lscr.io/linuxserver/calibre:latest
+    container_name: calibre
+    security_opt:
+      - seccomp:unconfined #optional
+    environment:
+      - PUID={{ puid }}
+      - PGID={{ pgid }}
+      - TZ={{ timezone }}
+      - COUSTOM_USER={{ calibre_username }}
+      - PASSWORD={{ calibre_password }}
+      - CLI_ARGS={{ calibre_args }}
+    volumes:
+      - ./config:/config
+      - {{ books_dir }}:/books
+    ports:
+      - 8080:8080
+      - 8181:8181
+      - 8081:8081
+      - 9090:9090
+    restart: unless-stopped
