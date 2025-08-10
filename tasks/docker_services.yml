@@ -24,6 +24,7 @@
 - name: Ensure each service is running
   community.docker.docker_compose_v2:
     project_src: "{{ docker_dir }}/{{ item.name }}/"
+    pull: always
     build: never
     remove_orphans: true
   become: false

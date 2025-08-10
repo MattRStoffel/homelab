@@ -4,6 +4,7 @@
   hostname: {{ name }}
   volumes:
    - ./tailscale_state:/var/lib/tailscale
+   - ./certs:/certs
    - /dev/net/tun:/dev/net/tun
   cap_add:
    - net_admin

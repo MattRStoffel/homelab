@@ -2,7 +2,13 @@
 ---
 
 services:
-  calibre:
+{% if tailscale_enable and ts_authkey %}
+{% with name='calibre' %}
+{% include 'tailscale.yml.j2'%}
+{% endwith %}
+{% endif %}
+
+ calibre:
     image: lscr.io/linuxserver/calibre:latest
     container_name: calibre
     security_opt:
@@ -17,9 +23,15 @@ services:
     volumes:
       - ./config:/config
       - {{ books_dir }}:/books
-    ports:
-      - 8080:8080
-      - 8181:8181
-      - 8081:8081
-      - 9090:9090
+      - ./certs:/certs
+    # ports:
+    #   - 8080:8080
+    #   - 8181:8181
+    #   - 8081:8081
+    #   - 9090:9090
     restart: unless-stopped
+{% if tailscale_enable and ts_authkey %}
+    depends_on:
+      - calibre-tailscale
+    network_mode: service:calibre-tailscale
+{% endif %}

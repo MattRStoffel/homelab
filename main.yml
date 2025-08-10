@@ -1,6 +1,6 @@
 ---
-- name: Configure Internet Pi.
-  hosts: internet_pi
+- name: Configure mattlab
+  hosts: mattlab
   become: true
 
   pre_tasks:
@@ -8,17 +8,17 @@
       ansible.builtin.include_vars:
         file: config.yml
 
-    # - name: Ensure apt cache is up to date.
-    #   ansible.builtin.apt:
-    #     update_cache: true
-    #     cache_valid_time: 3600
-    #   when: ansible_facts.os_family == "Debian"
+    - name: Ensure apt cache is up to date.
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+      when: ansible_facts.os_family == "Debian"
 
-    # - name: Include tasks to mount drives
-    #   ansible.builtin.import_tasks: tasks/mount_drives.yml
+    - name: Include tasks to mount drives
+      ansible.builtin.import_tasks: tasks/mount_drives.yml
 
-    # - name: Include tasks to install Docker
-    #   ansible.builtin.import_tasks: tasks/docker_install.yml
+    - name: Include tasks to install Docker
+      ansible.builtin.import_tasks: tasks/docker_install.yml
 
   tasks:
     # - name: Include Home Assistant tasks
@@ -27,15 +27,16 @@
     - name: Include generic Docker services tasks
       ansible.builtin.import_tasks: tasks/docker_services.yml
 
-    - name: Include tailscale service managment
-      ansible.builtin.import_tasks: tasks/tailscale_clean.yml
+    - name: Set up Tailscale HTTPS for services
+      ansible.builtin.import_tasks: tasks/tailscale_https.yml
+
 
   # handlers:
-    - name: Restart Docker Services
-      community.docker.docker_compose_v2:
-        project_src: "{{ docker_dir }}/{{ item.name }}/"
-        build: never
-        state: restarted
-      become: false
-      with_items: "{{ docker_services }}"
+    # - name: Restart Docker Services
+    #   community.docker.docker_compose_v2:
+    #     project_src: "{{ docker_dir }}/{{ item.name }}/"
+    #     build: never
+    #     state: restarted
+    #   become: false
+    #   with_items: "{{ docker_services }}"
 

@@ -3,7 +3,7 @@
 
 services:
 {% if tailscale_enable and ts_authkey %}
-{% with name='homeassistant' %}
+{% with name='home-assistant' %}
 {% include 'tailscale.yml.j2'%}
 {% endwith %}
 
@@ -11,9 +11,9 @@ services:
    - TS_DEST_IP=192.168.1.2
 {% endif %}
 
- homeassistant:
+ home-assistant:
     image: ghcr.io/home-assistant/home-assistant:stable
-    container_name: homeassistant
+    container_name: home-assistant
     volumes:
       - ./config:/config
       - /etc/localtime:/etc/localtime:ro

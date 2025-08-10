@@ -31,10 +31,10 @@ youtube_dir:    '{{ media_dir }}/youtube'
 downloads_dir:  '{{ media_dir }}/downloads'
 
 drives:
-  - { path: "{{ media_dir }}",      uuid: "ffc30921-a43b-45b2-b29c-80c1d786f554" }
-  - { path: "{{ nextcloud_dir }}",  uuid: "3f77516a-1a4f-4d90-af61-4b0d5e24aad0" }
-  - { path: "{{ data_dir }}",       uuid: "987e2748-a7e7-4924-8568-bae9aaa45175" }
-  - { path: "{{ docker_dir }}",     uuid: "dacce5ab-70ce-4c5f-9b3c-af0b53a837cb" }
+  - { path: "{{ media_dir }}",      uuid: "" }
+  - { path: "{{ nextcloud_dir }}",  uuid: "" }
+  - { path: "{{ data_dir }}",       uuid: "" }
+  - { path: "{{ docker_dir }}",     uuid: "" }
 
 ts_authkey: ''
 
@@ -53,4 +53,4 @@ docker_services:
   - { name: "jellyfin",         template: "templates/jellyfin-docker-compose.yml.j2",         tailscale_enable: true  }
   - { name: "jellyfinp",        template: "templates/jellyfinp-docker-compose.yml.j2",        tailscale_enable: true  }
   - { name: "arr",        template: "templates/arr-docker-compose.yml.j2",        tailscale_enable: true  }
-  - { name: "calibre",    template: "templates/calibre-docker-compose.yml.j2",  tailscale_enable:false }
+  - { name: "calibre",    template: "templates/calibre-docker-compose.yml.j2",  tailscale_enable: false }

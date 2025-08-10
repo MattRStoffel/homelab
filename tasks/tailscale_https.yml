@@ -1,0 +1,13 @@
+---
+- name: Generate TLS cert via Tailscale
+  ansible.builtin.command:
+    cmd: >
+      docker exec {{ service.name }}-tailscale
+      tailscale cert
+      --cert-file=/certs/{{ service.name }}.crt
+      --key-file=/certs/{{ service.name }}.key
+      {{ service.name }}.{{ tailnet_domain }}
+  loop: "{{ docker_services }}"
+  loop_control:
+    loop_var: service
+  when: service.tailscale_enable

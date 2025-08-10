@@ -3,7 +3,7 @@
 
 services:
 {% if tailscale_enable and ts_authkey %}
-{% with name='actual' %}
+{% with name='actual-budget' %}
 {% include 'tailscale.yml.j2'%}
 {% endwith %}
 {% endif %}
@@ -12,14 +12,15 @@ services:
     image: docker.io/actualbudget/actual-server:latest
     container_name: actual-budget
     environment:
-      - ACTUAL_HTTPS_KEY=/data/certs/actual.tail33e78.ts.net.key
-      - ACTUAL_HTTPS_CERT=/data/certs/actual.tail33e78.ts.net.crt
-      - ACTUAL_PORT=80
+      - ACTUAL_HTTPS_KEY=/certs/actual-budget.key
+      - ACTUAL_HTTPS_CERT=/certs/actual-budget.crt
+      - ACTUAL_PORT=443
     volumes:
       - ./actual-data:/data
+      - ./certs:/certs
     restart: unless-stopped
 {% if tailscale_enable and ts_authkey %}
     depends_on:
-      - tailscale-actual
-    network_mode: service:tailscale-actual
+      - actual-budget-tailscale
+    network_mode: service:actual-budget-tailscale
 {% endif %}
