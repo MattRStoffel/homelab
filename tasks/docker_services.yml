@@ -19,6 +19,7 @@
   loop_control:
     label: "{{ item.name }}"
   vars:
+    name: "{{ item.name }}"
     tailscale_enable: "{{ item.tailscale_enable | default(false) }}"
 
 - name: Ensure each service is running

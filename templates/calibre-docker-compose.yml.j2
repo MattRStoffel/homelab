@@ -3,14 +3,14 @@
 
 services:
 {% if tailscale_enable and ts_authkey %}
-{% with name='calibre' %}
+{% with name=name %}
 {% include 'tailscale.yml.j2'%}
 {% endwith %}
 {% endif %}
 
- calibre:
+ {{ name }}:
     image: lscr.io/linuxserver/calibre:latest
-    container_name: calibre
+    container_name: {{ name }}
     security_opt:
       - seccomp:unconfined #optional
     environment:
@@ -32,6 +32,6 @@ services:
     restart: unless-stopped
 {% if tailscale_enable and ts_authkey %}
     depends_on:
-      - calibre-tailscale
-    network_mode: service:calibre-tailscale
+      - {{ name }}-tailscale
+    network_mode: service:{{ name }}-tailscale
 {% endif %}

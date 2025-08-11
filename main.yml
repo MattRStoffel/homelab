@@ -21,22 +21,11 @@
       ansible.builtin.import_tasks: tasks/docker_install.yml
 
   tasks:
-    # - name: Include Home Assistant tasks
-    #   ansible.builtin.import_tasks: tasks/home_assistant.yml
+    - name: Include Home Assistant tasks
+      ansible.builtin.import_tasks: tasks/home_assistant.yml
 
     - name: Include generic Docker services tasks
       ansible.builtin.import_tasks: tasks/docker_services.yml
 
-    - name: Set up Tailscale HTTPS for services
+    - name: Set up Tailscale TLS for services
       ansible.builtin.import_tasks: tasks/tailscale_https.yml
-
-
-  # handlers:
-    # - name: Restart Docker Services
-    #   community.docker.docker_compose_v2:
-    #     project_src: "{{ docker_dir }}/{{ item.name }}/"
-    #     build: never
-    #     state: restarted
-    #   become: false
-    #   with_items: "{{ docker_services }}"
-

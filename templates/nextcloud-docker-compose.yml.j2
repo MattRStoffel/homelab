@@ -2,14 +2,14 @@
 ---
 services:
 {% if tailscale_enable and ts_authkey %}
-{% with name='nextcloud' %}
+{% with name=name %}
 {% include 'tailscale.yml.j2'%}
 {% endwith %}
 {% endif %}
 
  db:
   image: mariadb:10.6
-  container_name: nextcloud_db
+  container_name: {{ name }}_db
   command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
   restart: unless-stopped
   environment:
@@ -21,8 +21,8 @@ services:
    - {{ nextcloud_dir }}/db:/var/lib/mysql
 
  app:
-  image: nextcloud
-  container_name: nextcloud_app
+  image: {{ name }}
+  container_name: {{ name }}_app
   environment:
    - MYSQL_PASSWORD={{ nextcloud_db_password }}
    - MYSQL_DATABASE={{ nextcloud_db_name }}
@@ -34,6 +34,6 @@ services:
   depends_on: 
    - db
 {% if tailscale_enable and ts_authkey %}
-   - nextcloud-tailscale
-  network_mode: service:nextcloud-tailscale
+   - {{ name }}-tailscale
+  network_mode: service:{{ name }}-tailscale
 {% endif %}

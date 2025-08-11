@@ -3,7 +3,7 @@
 ---
 services:
 {% if tailscale_enable and ts_authkey %}
-{% with name='arr' %}
+{% with name=name %}
 {% include 'tailscale.yml.j2'%}
 {% endwith %}
 {% endif %}

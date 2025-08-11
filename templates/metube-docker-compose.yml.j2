@@ -1,22 +1,21 @@
 # {{ ansible_managed }}
 ---
-
 services:
 {% if tailscale_enable and ts_authkey %}
-{% with name='metube' %}
+{% with name=name %}
 {% include 'tailscale.yml.j2'%}
 {% endwith %}
 {% endif %}
 
- metube:
+ {{ name }}:
     image: ghcr.io/alexta69/metube
-    container_name: metube
+    container_name: {{ name }}
     volumes:
       - ./config:/config
       - {{ data_dir }}/downloads:/downloads
     restart: unless-stopped
 {% if tailscale_enable and ts_authkey %}
     depends_on: 
-      - metube-tailscale
-    network_mode: service:metube-tailscale
+      - {{ name }}-tailscale
+    network_mode: service:{{ name }}-tailscale
 {% endif %}

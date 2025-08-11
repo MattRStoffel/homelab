@@ -1,16 +1,15 @@
 # {{ ansible_managed }}
 ---
-
 services:
 {% if tailscale_enable and ts_authkey %}
-{% with name='jellyfinp' %}
+{% with name=name %}
 {% include 'tailscale.yml.j2'%}
 {% endwith %}
 {% endif %}
 
- jellyfinp:
+ {{ name }}:
     image: lscr.io/linuxserver/jellyfin:latest
-    container_name: jellyfinp
+    container_name: {{ name }}
     volumes:
       - ./config:/config
       - {{ data_dir }}:/data/
@@ -20,6 +19,6 @@ services:
     restart: unless-stopped
 {% if tailscale_enable and ts_authkey %}
     depends_on: 
-      - jellyfinp-tailscale
-    network_mode: service:jellyfinp-tailscale
+      - {{ name }}-tailscale
+    network_mode: service:{{ name }}-tailscale
 {% endif %}
